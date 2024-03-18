@@ -14,6 +14,6 @@ class Processos{
 }
 
 
-// const p1 = new Processos(2, 10, 3, 0);
+const p1 = new Processos(2, 10, 3, 0);
 
-// console.log(p1)
+console.log(p1)
