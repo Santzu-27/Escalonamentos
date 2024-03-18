@@ -5,11 +5,10 @@ function rand(max){
 }
 
 class Processos{
-    constructor(tempo_chegada, tempo_execucao, prioridade, tempo_espera){
+    constructor(tempo_chegada, tempo_execucao, prioridade){
         this.tempo_chegada = tempo_chegada,
         this.tempo_execucao = tempo_execucao,
         this.prioridade = prioridade,
-        this.tempo_espera= tempo_espera,
         this.tempo_restante = this.tempo_execucao;
     }
 }
