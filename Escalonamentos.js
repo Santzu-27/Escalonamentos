@@ -13,6 +13,13 @@ class Processos{
     }
 }
 
+function populaAleatorio(){
+    
+}
+
+function populaManual(){
+
+}
 
 const p1 = new Processos(2, 10, 3, 0);
 
