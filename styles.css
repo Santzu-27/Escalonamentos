@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    height: 100%;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    background-color: rgb(20, 58, 80);
+    font-size: 3rem;
+    text-align: center;
+}
+main{
+    width: 80%;
+    background-color: white;
+    margin: auto;
+    padding: 2rem 0;
+}
+button{
+    padding: .5rem 1.5rem;
+    font-size: 1.6rem;
+}
