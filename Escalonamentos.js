@@ -3,7 +3,7 @@ const divInserir = document.getElementById('inserir')
 const divTempos = document.getElementById('tempos')
 
 function rand(max) {
-    const min = 0;
+    const min = 1;
     let num = Math.floor(Math.random() * (max - min) + 1)
     return num;
 }
@@ -21,9 +21,9 @@ class Processo {
 const processos = [];
 function populaAleatorio() {
     divInserir.innerHTML = ``
-    const p1 = new Processo(rand(15), rand(15), rand(5));
-    const p2 = new Processo(rand(15), rand(15), rand(5));
-    const p3 = new Processo(rand(15), rand(15), rand(5));
+    const p1 = new Processo(rand(20), rand(20), rand(5));
+    const p2 = new Processo(rand(20), rand(20), rand(5));
+    const p3 = new Processo(rand(20), rand(20), rand(5));
     processos.splice(0, processos.length)
     processos.push(p1);
     processos.push(p2);
@@ -43,12 +43,12 @@ function populaManual(i) {
     }
     divInserir.innerHTML = `
         <p>Digite o tempo de execução do Processo ${i}:</p>
-        <input type="number" id="exec">
+        <input type="number" min="1" id="exec">
         <p>Digite o tempo de chegada do Processo ${i}:</p>
-        <input type="number" id="cheg">
+        <input type="number" min="1" id="cheg">
         <p>Digite a prioridade do Processo ${i}:</p>
-        <input type="number" id="prior"> <br>
-        <button id="enviar" onclick="addManual(${i})">Enviar</button>
+        <input type="number" min="1" id="prior"> <br>
+        <button id="enviar"onclick="addManual(${i})">Enviar</button>
     `
     console.log(i)
 }

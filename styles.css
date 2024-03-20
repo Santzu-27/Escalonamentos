@@ -40,7 +40,14 @@ button{
     padding: .5rem 1.5rem;
     font-size: 1.6rem;
 }
-
+#inserir{
+    font-size: 1.7rem;
+}
+#inserir button{
+    font-size: 1.6rem;
+    padding: 8px;
+    box-shadow: .5px .5px 1px rgb(38, 0, 255);
+}
 #comandos{
     display: none;
     width: 90%;
