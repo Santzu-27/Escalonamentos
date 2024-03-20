@@ -53,17 +53,25 @@ button{
 #processos{
     font-size: 2rem;
     text-align: left;
-    padding-left: 10px;
+    margin: auto auto;;
+    width: 60%;
 }
 #tempos{
     display: none;
-    color: rgb(220, 255, 188);
     font-size: 1.5rem;
     margin: 10px auto;
-    width: fit-content;
+    width: 60%;
     text-align: justify;
     background-color: var(--maincolor);
     padding: 15px;
+}
+#tempos div{
+    border-bottom: 1px solid  rgb(220, 255, 188);
+    background-color: white;
+    color: black;
+    margin-bottom: 10px;
+    padding: 4px;
+    box-shadow: inset .1px .1px 3px rgba(0, 0, 0, 0.596);
 }
 h1{
     font-size: 2.8rem;
@@ -73,4 +81,11 @@ button:hover{
     background-color: rgb(226, 233, 200);
     font-size: 1.3rem;
     width: 9rem;
+}
+
+#stats{
+    width: 60%;
+    margin: 0 auto;
+    font-size: 2rem;
+    text-align: LEFT;
 }
