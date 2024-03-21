@@ -142,3 +142,7 @@ function popularNovamente(){
     divStats.innerHTML = '';
     document.getElementById('comandos').style.display = 'none'
 }
+
+function desenvolvimento(esc){
+    alert(`Processo ${esc} em desenvolvimento `)
+}
