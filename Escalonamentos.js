@@ -1,6 +1,7 @@
 const mainPage = document.getElementById('main')
 const divInserir = document.getElementById('inserir')
 const divTempos = document.getElementById('tempos')
+const processos = [];
 
 function rand(max) {
     const min = 1;
@@ -18,7 +19,6 @@ class Processo {
     }
 }
 
-const processos = [];
 function populaAleatorio() {
     divInserir.innerHTML = ``
     const p1 = new Processo(rand(20), rand(20), rand(5));
@@ -38,7 +38,6 @@ function populaManual(i) {
     }
     if(i > 2) {
         mostraProcessos();
-        console.log(processos);
         return;
     }
     divInserir.innerHTML = `
@@ -54,7 +53,6 @@ function populaManual(i) {
 }
 
 function addManual(i) {
-
     const exec = Number(document.getElementById('exec').value)
     const cheg = Number(document.getElementById('cheg').value)
     const prior = Number(document.getElementById('prior').value)
