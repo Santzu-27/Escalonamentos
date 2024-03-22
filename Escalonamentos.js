@@ -1,6 +1,9 @@
+const divStats = document.createElement('div');
 const mainPage = document.getElementById('main')
 const divInserir = document.getElementById('inserir')
+const divInicio = document.getElementById('inicio')
 const divTempos = document.getElementById('tempos')
+const divComandos = document.getElementById('comandos')
 const processos = [];
 
 function rand(max) {
@@ -114,8 +117,7 @@ function fcfs(){
         }
     }
 }
-
-const divStats = document.createElement('div');
+1
 function imprimeStats(){
     let tempoTotal = 0;
     let tempoMedio = 0;
@@ -136,11 +138,11 @@ function imprimeStats(){
 }
 
 function popularNovamente(){
-    document.getElementById('inicio').style.display = 'block';
+    divInicio.style.display = 'block';
     divInserir.innerHTML = '';
     divTempos.style.display = 'none';
     divStats.innerHTML = '';
-    document.getElementById('comandos').style.display = 'none'
+    divComandos.style.display = 'none'
 }
 
 function desenvolvimento(esc){
