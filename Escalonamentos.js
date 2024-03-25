@@ -24,9 +24,9 @@ class Processo {
 
 function populaAleatorio() {
     divInserir.innerHTML = ``
-    const p1 = new Processo(rand(20), rand(20), rand(5));
-    const p2 = new Processo(rand(20), rand(20), rand(5));
-    const p3 = new Processo(rand(20), rand(20), rand(5));
+    const p1 = new Processo(rand(20), rand(20), rand(15));
+    const p2 = new Processo(rand(20), rand(20), rand(15));
+    const p3 = new Processo(rand(20), rand(20), rand(15));
     processos.splice(0, processos.length)
     processos.push(p1);
     processos.push(p2);
@@ -91,6 +91,34 @@ function mostraProcessos() {
     document.getElementById('comandos').style.display = 'flex';
 }
 
+
+function sjf(preemp){
+    tempo = 0;
+    i= 0;
+    const chegaram = []
+    while(i < processos.length){
+        verificaChegada(tempo, chegaram);
+        processoExecucao = verificaMenor();
+        tempo++;
+    }
+
+}
+
+function verificaMenor(tempo){
+    for(processo of processos){
+
+    }
+}
+
+function verificaChegada(tempo, chegaram){
+    for(processo of processos){
+        if(processo.tempo_chegada >= tempo){
+            chegaram.push(processo);
+        }
+    }
+}
+
+
 function fcfs(){
     let tempo = 0;
     let i= 0; // i = Posição do array de processos
@@ -106,18 +134,22 @@ function fcfs(){
         tempo++;
         processoEmExecucao.tempo_restante--;
 
-        let novoTempo = document.createElement('div');
-        novoTempo.innerHTML = `
-            Tempo[${tempo}]: Processo[${i}] restante = ${processoEmExecucao.tempo_restante}
-        `
-        divTempos.appendChild(novoTempo);
+        addDiv(tempo, i, processoEmExecucao);
         if(processoEmExecucao.tempo_restante == 0){
             processoEmExecucao.tempo_restante = processoEmExecucao.tempo_execucao //Para resetar o processo;
             i++
         }
     }
 }
-1
+
+function addDiv(tempo, i, processoEmExecucao){
+    let novoTempo = document.createElement('div');
+    novoTempo.innerHTML = `
+        Tempo[${tempo}]: Processo[${i}] restante = ${processoEmExecucao.tempo_restante}
+    `
+    divTempos.appendChild(novoTempo);
+}
+
 function imprimeStats(){
     let tempoTotal = 0;
     let tempoMedio = 0;
@@ -148,3 +180,4 @@ function popularNovamente(){
 function desenvolvimento(esc){
     alert(`Processo ${esc} em desenvolvimento `)
 }
+
