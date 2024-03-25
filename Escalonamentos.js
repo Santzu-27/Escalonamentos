@@ -98,16 +98,28 @@ function sjf(preemp){
     const chegaram = []
     while(i < processos.length){
         verificaChegada(tempo, chegaram);
-        processoExecucao = verificaMenor();
+        processoExecucao = verificaMenor(chegaram);
+
+        if(processoExecucao.tempo_restante == 0){
+            i++;
+        }
+        if(processoExecucao.tempo_execucao == processoExecucao.tempo_restante){
+            processoExecucao.tempo_espera = tempo;     
+        }
         tempo++;
     }
-
+    
 }
 
-function verificaMenor(tempo){
-    for(processo of processos){
-
+function verificaMenor(chegaram){
+    menor = chegaram[0];
+    for(processo of chegaram){
+        if(processo.tempo_restante < menor.tempo_restante && processo.tempo_restante > 0){
+            menor = processo;
+        }
+    
     }
+    return menor;
 }
 
 function verificaChegada(tempo, chegaram){
@@ -122,30 +134,28 @@ function verificaChegada(tempo, chegaram){
 function fcfs(){
     let tempo = 0;
     let i= 0; // i = Posição do array de processos
-    divTempos.innerHTML = '';
-    divTempos.style.display = 'block';
     while(i < processos.length){
-        let processoEmExecucao = processos[i];
+        let processoExecucao = processos[i];
         //Dar tempo de espera verificando se o processo está iniciando
-        if(processoEmExecucao.tempo_execucao == processoEmExecucao.tempo_restante){
-            processoEmExecucao.tempo_espera = tempo;     
+        if(processoExecucao.tempo_execucao == processoExecucao.tempo_restante){
+            processoExecucao.tempo_espera = tempo;     
         }
-
         tempo++;
-        processoEmExecucao.tempo_restante--;
-
-        addDiv(tempo, i, processoEmExecucao);
-        if(processoEmExecucao.tempo_restante == 0){
-            processoEmExecucao.tempo_restante = processoEmExecucao.tempo_execucao //Para resetar o processo;
+        processoExecucao.tempo_restante--;
+        addDiv(tempo, i, processoExecucao);
+        if(processoExecucao.tempo_restante == 0){
+            processoExecucao.tempo_restante = processoExecucao.tempo_execucao //Para resetar o processo;
             i++
         }
     }
 }
 
-function addDiv(tempo, i, processoEmExecucao){
+function addDiv(tempo, i, processoExecucao){
+    divTempos.innerHTML = '';
+    divTempos.style.display = 'block';
     let novoTempo = document.createElement('div');
     novoTempo.innerHTML = `
-        Tempo[${tempo}]: Processo[${i}] restante = ${processoEmExecucao.tempo_restante}
+        Tempo[${tempo}]: Processo[${i}] restante = ${processoExecucao.tempo_restante}
     `
     divTempos.appendChild(novoTempo);
 }
