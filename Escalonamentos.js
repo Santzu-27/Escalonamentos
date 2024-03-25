@@ -13,20 +13,21 @@ function rand(max) {
 }
 
 class Processo {
-    constructor(tempo_chegada, tempo_execucao, prioridade) {
+    constructor(tempo_chegada, tempo_execucao, prioridade, id) {
         this.tempo_chegada = tempo_chegada,
             this.tempo_execucao = tempo_execucao,
             this.prioridade = prioridade,
             this.tempo_restante = this.tempo_execucao;
             this.tempo_espera = 0;
+            this.id = id
     }
 }
 
 function populaAleatorio() {
     divInserir.innerHTML = ``
-    const p1 = new Processo(rand(20), rand(20), rand(15));
-    const p2 = new Processo(rand(20), rand(20), rand(15));
-    const p3 = new Processo(rand(20), rand(20), rand(15));
+    const p1 = new Processo(rand(20), rand(20), rand(15), 1);
+    const p2 = new Processo(rand(20), rand(20), rand(15), 2);
+    const p3 = new Processo(rand(20), rand(20), rand(15), 3);
     processos.splice(0, processos.length)
     processos.push(p1);
     processos.push(p2);
@@ -60,14 +61,14 @@ function addManual(i) {
     const cheg = Number(document.getElementById('cheg').value)
     const prior = Number(document.getElementById('prior').value)
     if(
-        exec <= 0 ||
-        cheg < 0 ||
-        prior <= 0 
+        exec < 0  ||
+        cheg <= 0 ||
+        prior < 0 
     ){
         alert('Preencha todos os campos!')
         return;
     }
-    const processo = new Processo(cheg, exec, prior);
+    const processo = new Processo(cheg, exec, prior, i);
     processos.push(processo)
     i++;
     populaManual(i);
@@ -93,23 +94,49 @@ function mostraProcessos() {
 
 
 function sjf(preemp){
+    divTempos.innerHTML = '';
+    divTempos.style.display = 'block';
     tempo = 0;
-    i= 0;
-    const chegaram = []
-    while(i < processos.length){
+
+    const chegaram = [];
+    while(executouTodos(processos) == false){
         verificaChegada(tempo, chegaram);
+
         processoExecucao = verificaMenor(chegaram);
 
-        if(processoExecucao.tempo_restante == 0){
-            i++;
-        }
-        if(processoExecucao.tempo_execucao == processoExecucao.tempo_restante){
-            processoExecucao.tempo_espera = tempo;     
-        }
+        processoExecucao.tempo_restante--;
+        
+        processos[processoExecucao.id].tempo_restante--;
+
+        addDiv(tempo, processoExecucao.id, processoExecucao);
+
+        addTempoEspera(processoExecucao);
+
+
         tempo++;
-    }
-    
+    }   
 }
+
+function executouTodos(procs){
+    executou = true;
+    for(processo of procs){
+        if(processo.tempo_restante > 0){
+            executou = false;
+            return executou
+        }
+    }
+    return executou;
+
+}
+
+function addTempoEspera(processoExecucao){
+    for(processo of processos){
+        if(processo !== processoExecucao){
+            processo.tempo_espera++;
+        }
+    }
+}
+
 
 function verificaMenor(chegaram){
     menor = chegaram[0];
@@ -132,6 +159,8 @@ function verificaChegada(tempo, chegaram){
 
 
 function fcfs(){
+    divTempos.innerHTML = '';
+    divTempos.style.display = 'block';
     let tempo = 0;
     let i= 0; // i = Posição do array de processos
     while(i < processos.length){
@@ -142,7 +171,7 @@ function fcfs(){
         }
         tempo++;
         processoExecucao.tempo_restante--;
-        addDiv(tempo, i, processoExecucao);
+        addDiv(tempo, processoExecucao.id, processoExecucao);
         if(processoExecucao.tempo_restante == 0){
             processoExecucao.tempo_restante = processoExecucao.tempo_execucao //Para resetar o processo;
             i++
@@ -151,8 +180,6 @@ function fcfs(){
 }
 
 function addDiv(tempo, i, processoExecucao){
-    divTempos.innerHTML = '';
-    divTempos.style.display = 'block';
     let novoTempo = document.createElement('div');
     novoTempo.innerHTML = `
         Tempo[${tempo}]: Processo[${i}] restante = ${processoExecucao.tempo_restante}
