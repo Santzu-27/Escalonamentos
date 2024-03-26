@@ -96,6 +96,8 @@ function mostraProcessos() {
 
 
 function sjf(preemp) {
+    concluidos.splice(0, concluidos.length)
+
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
     tempo = 0;
@@ -104,11 +106,15 @@ function sjf(preemp) {
         if(processos.length > 0) {
             verificaChegada(tempo);
         }
-        processoExecucao = verificaMenor(chegaram);
+        processoExecucao = verificaMenor();
         if(processoExecucao === undefined){
             addDiv(tempo, -1, processoExecucao )
-        }else{
+        }else if(!preemp){
+
+        }
+        {
             processoExecucao.tempo_restante--;
+            addTempoEspera(processoExecucao);
             if(processoExecucao.tempo_restante == 0){
                 concluidos.push(processoExecucao)
                 processos.push(processoExecucao);
@@ -116,10 +122,10 @@ function sjf(preemp) {
             }
             addDiv(tempo, processoExecucao.id, processoExecucao)
         }
+        tempo ++
     }
 
     //Para resetar e realizar outros processos:
-    concluidos.splice(0, concluidos.length)
     for(processo of processos){
         processo.tempo_restante = processo.tempo_execucao
     }
@@ -137,7 +143,7 @@ function verificaChegada(tempo) {
 }
 
 function addTempoEspera(processoExecucao) {
-    for (processo of processos) {
+    for (processo of chegaram) {
         if (processo !== processoExecucao) {
             processo.tempo_espera++;
         }
@@ -197,15 +203,15 @@ function addDiv(tempo, i, processoExecucao) {
 function imprimeStats() {
     let tempoTotal = 0;
     let tempoMedio = 0;
-    for (p of processos) {
+    for (p of concluidos) {
         tempoTotal += p.tempo_espera;
     }
-    tempoMedio = tempoTotal / processos.length;
+    tempoMedio = tempoTotal / concluidos.length;
     divStats.innerHTML = `
         Tempos de espera: <br>
-        Processo 0 = ${processos[0].tempo_espera}<br>
-        Processo 1 = ${processos[1].tempo_espera}<br>
-        Processo 2 = ${processos[2].tempo_espera}<br>
+        Processo ${concluidos[0].id} = ${concluidos[0].tempo_espera}<br>
+        Processo ${concluidos[1].id} = ${concluidos[1].tempo_espera}<br>
+        Processo ${concluidos[2].id} = ${concluidos[2].tempo_espera}<br>
         Tempo médio: ${tempoMedio}<br>
         Tempo total: ${tempoTotal}<br>
     `
