@@ -49,7 +49,7 @@ function populaManual(i) {
         <p>Digite o tempo de execução do Processo ${i}:</p>
         <input type="number" min="1" id="exec">
         <p>Digite o tempo de chegada do Processo ${i}:</p>
-        <input type="number" min="0" id="cheg">
+        <input type="number" min="1" id="cheg">
         <p>Digite a prioridade do Processo ${i}:</p>
         <input type="number" min="1" id="prior"> <br>
         <button id="enviar"onclick="addManual(${i})">Enviar</button>
@@ -61,9 +61,9 @@ function addManual(i) {
     const cheg = Number(document.getElementById('cheg').value)
     const prior = Number(document.getElementById('prior').value)
     if (
-        exec < 0 ||
-        cheg < 0 ||
-        prior < 0
+        exec <= 0 ||
+        cheg <= 0 ||
+        prior <= 0
     ) {
         alert('Preencha todos os campos!')
         return;
