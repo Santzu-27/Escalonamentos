@@ -95,18 +95,17 @@ function mostraProcessos() {
 }
 
 function resetaProcessos(){
-    for(processo of concluidos){
+    concluidos.splice(0, concluidos.length)
+    for(processo of processos){
         processo.tempo_restante = processo.tempo_execucao
         processo.tempo_espera = 0
-        processos[processo.id] = processo;
     }    
-    concluidos.splice(0, concluidos.length)
 }
 function sjf(preemp) {
     resetaProcessos();
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
-    tempo = 0;
+    let tempo = 1;
     
     while (concluidos.length < 3) {
         if(processos.length > 0) {
@@ -120,26 +119,30 @@ function sjf(preemp) {
             tempo ++
         }else
         if(preemp){
-            diminuiTempo(processoExecucao);
+            diminuiTempo(processoExecucao, tempo);
+            tempo++
         }else{
             while(processoExecucao.tempo_restante > 0){
                 verificaChegada(tempo);
-                diminuiTempo(processoExecucao)
+                tempo++
+                diminuiTempo(processoExecucao, tempo)
             }
         }
     }
 }
 
-function diminuiTempo(processoExecucao){
+function diminuiTempo(processoExecucao, tempo){
     processoExecucao.tempo_restante--;
+    console.log('diminuiu')
+    console.log(tempo)
     addTempoEspera(processoExecucao);
-    if(processoExecucao.tempo_restante == 0){
+    console.log(processo.tempo_restante)
+    if(processoExecucao.tempo_restante <= 0){
         concluidos.push(processoExecucao)
         processos.push(processoExecucao)
         chegaram  = chegaram.filter(pr => pr !== processoExecucao);
     }
     addDiv(tempo, processoExecucao.id, processoExecucao)
-    tempo++
 }
 function verificaChegada(tempo) {
     for (processo of processos) {
@@ -176,21 +179,14 @@ function fcfs() {
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
     let tempo = 0;
-    let i = 0; // i = Posição do array de processos
-    let id = 0
-    while (i < processos.length) {
-        let processoExecucao = processos[i];
-        //Dar tempo de espera verificando se o processo está iniciando
-        if (processoExecucao.tempo_execucao == processoExecucao.tempo_restante) {
-            processoExecucao.tempo_espera = tempo;
-        }
+    for(processo of processos){
+        chegaram.push(processo);
+        processos = processos.filter(p => p !== processo)
+    }
+    while (concluidos.length < 3) {
+        let processoExecucao = chegaram[0];
         tempo++;
-        processoExecucao.tempo_restante--;
-        addDiv(tempo, processoExecucao.id, processoExecucao);
-        if (processoExecucao.tempo_restante == 0) {
-            i++
-            concluidos.push(processoExecucao);
-        }
+        diminuiTempo(processoExecucao, tempo)
     }
 }
 
