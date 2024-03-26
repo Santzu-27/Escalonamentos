@@ -34,7 +34,6 @@ function populaAleatorio() {
     processos.push(p1);
     processos.push(p2);
     processos.push(p3);
-    console.log(processos)
     mostraProcessos();
 }
 
@@ -55,7 +54,6 @@ function populaManual(i) {
         <input type="number" min="1" id="prior"> <br>
         <button id="enviar"onclick="addManual(${i})">Enviar</button>
     `
-    console.log(i)
 }
 
 function addManual(i) {
@@ -100,6 +98,12 @@ function resetaProcessos(){
         processo.tempo_restante = processo.tempo_execucao
         processo.tempo_espera = 0
     }    
+    //Organizar ordem:
+    let arraytemp = [...processos];
+    processos.splice(0, 3)
+    for(p of arraytemp){
+        processos[p.id] = p;
+    }
 }
 function sjf(preemp) {
     resetaProcessos();
@@ -133,10 +137,7 @@ function sjf(preemp) {
 
 function diminuiTempo(processoExecucao, tempo){
     processoExecucao.tempo_restante--;
-    console.log('diminuiu')
-    console.log(tempo)
     addTempoEspera(processoExecucao);
-    console.log(processo.tempo_restante)
     if(processoExecucao.tempo_restante <= 0){
         concluidos.push(processoExecucao)
         processos.push(processoExecucao)
@@ -149,9 +150,7 @@ function verificaChegada(tempo) {
         if (processo.tempo_chegada <= tempo && processo.tempo_restante > 0) {
             chegaram.push(processo);
             processos = processos.filter(p => p !== processo)
-            console.log('Chegaram: ' + chegaram)
-            console.log('Processos: ' + processos)
-        }else{console.log('NAAO')}
+        }
     }
 }
 
