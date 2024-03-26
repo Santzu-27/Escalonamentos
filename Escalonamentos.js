@@ -4,7 +4,9 @@ const divInserir = document.getElementById('inserir')
 const divInicio = document.getElementById('inicio')
 const divTempos = document.getElementById('tempos')
 const divComandos = document.getElementById('comandos')
-const processos = [];
+let chegaram = [];
+let processos = [];
+let concluidos = []
 
 function rand(max) {
     const min = 0;
@@ -15,9 +17,9 @@ function rand(max) {
 class Processo {
     constructor(tempo_chegada, tempo_execucao, prioridade, id) {
         this.tempo_chegada = tempo_chegada,
-            this.tempo_execucao = tempo_execucao,
-            this.prioridade = prioridade,
-            this.tempo_restante = this.tempo_execucao;
+        this.tempo_execucao = tempo_execucao,
+        this.prioridade = prioridade,
+        this.tempo_restante = this.tempo_execucao;
         this.tempo_espera = 0;
         this.id = id
     }
@@ -25,9 +27,9 @@ class Processo {
 
 function populaAleatorio() {
     divInserir.innerHTML = ``
-    const p1 = new Processo(rand(20), rand(20), rand(15), 1);
-    const p2 = new Processo(rand(20), rand(20), rand(15), 2);
-    const p3 = new Processo(rand(20), rand(20), rand(15), 3);
+    const p1 = new Processo(rand(8), rand(20), rand(15), 0);
+    const p2 = new Processo(rand(8), rand(20), rand(15), 1);
+    const p3 = new Processo(rand(8), rand(20), rand(15), 2);
     processos.splice(0, processos.length)
     processos.push(p1);
     processos.push(p2);
@@ -98,53 +100,40 @@ function sjf(preemp) {
     divTempos.style.display = 'block';
     tempo = 0;
 
-    const chegaram = [];
-    while (executouTodos(processos) == false) {
-        verificaChegada(tempo, chegaram);
+    while (concluidos.length < 3) {
+        if(processos.length > 0) {
+            verificaChegada(tempo);
+        }
         processoExecucao = verificaMenor(chegaram);
-        if (processoExecucao !== undefined && processoExecucao.tempo_restante > 0) {
-            if (chegaram.length > 0) {
-                console.log(chegaram[0])
-                processoExecucao.tempo_restante--;
-                console.log(processoExecucao.id)
-                processos[processoExecucao.id].tempo_restante--;
-                addDiv(tempo, processoExecucao.id, processoExecucao);
-            }else{
-                addDiv(tempo, -10, null);
+        if(processoExecucao === undefined){
+            addDiv(tempo, -1, processoExecucao )
+        }else{
+            processoExecucao.tempo_restante--;
+            if(processoExecucao.tempo_restante == 0){
+                concluidos.push(processoExecucao)
+                processos.push(processoExecucao);
+                chegaram  = chegaram.filter(pr => pr !== processoExecucao);
             }
-
-            addTempoEspera(processoExecucao);
-
-        } else {
-            addDiv(tempo, -10, null);
-            addTempoEspera(processoExecucao);
-        }
-
-        tempo++;
-        if (tempo >= 20) {
-            return
+            addDiv(tempo, processoExecucao.id, processoExecucao)
         }
     }
+
+    //Para resetar e realizar outros processos:
+    concluidos.splice(0, concluidos.length)
+    for(processo of processos){
+        processo.tempo_restante = processo.tempo_execucao
+    }
+
 }
-function verificaChegada(tempo, chegaram) {
+function verificaChegada(tempo) {
     for (processo of processos) {
-        if (processo.tempo_chegada <= tempo) {
-            chegaram = [{...processo}];
-            console.log(chegaram)
-        }
+        if (processo.tempo_chegada <= tempo && processo.tempo_restante > 0) {
+            chegaram.push(processo);
+            processos = processos.filter(p => p !== processo)
+            console.log('Chegaram: ' + chegaram)
+            console.log('Processos: ' + processos)
+        }else{console.log('NAAO')}
     }
-}
-
-function executouTodos() {
-    executou = true;
-    for (processo of processos) {
-        if (processo.tempo_restante > 0) {
-            executou = false;
-            return executou
-        }
-    }
-    return executou;
-
 }
 
 function addTempoEspera(processoExecucao) {
@@ -156,7 +145,7 @@ function addTempoEspera(processoExecucao) {
 }
 
 
-function verificaMenor(chegaram) {
+function verificaMenor() {
     menor = chegaram[0];
     for (processo of chegaram) {
         if (processo.tempo_restante < menor.tempo_restante && processo.tempo_restante > 0) {
@@ -192,7 +181,7 @@ function fcfs() {
 
 function addDiv(tempo, i, processoExecucao) {
     let novoTempo = document.createElement('div');
-    if (processoExecucao == null) {
+    if (processoExecucao == undefined) {
 
         novoTempo.innerHTML = `
         Tempo[${tempo}]: Nenhum Processo Chegou

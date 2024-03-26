@@ -5,10 +5,6 @@ const array = [
 ];
 
 const a2 = []
-
-a2.push({...array[0]})
-a2[0].nome = 'ssss'
-console.log(a2)
+array.splice(0, 0)
 console.log(array)
-
 
