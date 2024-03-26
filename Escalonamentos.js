@@ -9,7 +9,7 @@ let processos = [];
 let concluidos = []
 
 function rand(max) {
-    const min = 0;
+    const min = 1;
     let num = Math.floor(Math.random() * (max - min) + 1)
     return num;
 }
@@ -119,34 +119,26 @@ function sjf(preemp) {
             tempo ++
         }else
         if(preemp){
-            processoExecucao.tempo_restante--;
-            addTempoEspera(processoExecucao);
-            if(processoExecucao.tempo_restante == 0){
-                concluidos.push(processoExecucao)
-                processos.push(processoExecucao);
-                chegaram  = chegaram.filter(pr => pr !== processoExecucao);
-            }
-            addDiv(tempo, processoExecucao.id, processoExecucao)
-            tempo++
+            diminuiTempo(processoExecucao);
         }else{
             while(processoExecucao.tempo_restante > 0){
                 verificaChegada(tempo);
-                processoExecucao.tempo_restante--;
-                addTempoEspera(processoExecucao);
-                if(processoExecucao.tempo_restante == 0){
-                    concluidos.push(processoExecucao)
-                    processos.push(processoExecucao);
-                    chegaram  = chegaram.filter(pr => pr !== processoExecucao);
-                }
-                addDiv(tempo, processoExecucao.id, processoExecucao)
-                
-                tempo ++
+                diminuiTempo(processoExecucao)
             }
         }
     }
-    
-    //Para resetar e realizar outros processos:
+}
 
+function diminuiTempo(processoExecucao){
+    processoExecucao.tempo_restante--;
+    addTempoEspera(processoExecucao);
+    if(processoExecucao.tempo_restante == 0){
+        concluidos.push(processoExecucao)
+        processos.push(processoExecucao);
+        chegaram  = chegaram.filter(pr => pr !== processoExecucao);
+    }
+    addDiv(tempo, processoExecucao.id, processoExecucao)
+    tempo++
 }
 function verificaChegada(tempo) {
     for (processo of processos) {
@@ -167,7 +159,6 @@ function addTempoEspera(processoExecucao) {
     }
 }
 
-
 function verificaMenor() {
     menor = chegaram[0];
     for (processo of chegaram) {
@@ -178,8 +169,6 @@ function verificaMenor() {
     }
     return menor;
 }
-
-
 
 function fcfs() {
     concluidos.splice(0, concluidos.length)
