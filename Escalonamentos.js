@@ -94,15 +94,16 @@ function mostraProcessos() {
     document.getElementById('comandos').style.display = 'flex';
 }
 
-function resetaTempos(){
-    for(processo of processos){
+function resetaProcessos(){
+    for(processo of concluidos){
         processo.tempo_restante = processo.tempo_execucao
         processo.tempo_espera = 0
+        processos[processo.id] = processo;
     }    
+    concluidos.splice(0, concluidos.length)
 }
 function sjf(preemp) {
-    concluidos.splice(0, concluidos.length)
-    resetaTempos();
+    resetaProcessos();
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
     tempo = 0;
@@ -171,8 +172,7 @@ function verificaMenor() {
 }
 
 function fcfs() {
-    concluidos.splice(0, concluidos.length)
-    resetaTempos();
+    resetaProcessos();
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
     let tempo = 0;
