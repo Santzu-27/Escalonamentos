@@ -102,13 +102,16 @@ function sjf(preemp) {
     while (executouTodos(processos) == false) {
         verificaChegada(tempo, chegaram);
         processoExecucao = verificaMenor(chegaram);
-        if (chegaram.length > 0) {
-            if (processoExecucao.tempo_restante > 0) {
+        if (processoExecucao !== undefined && processoExecucao.tempo_restante > 0) {
+            if (chegaram.length > 0) {
+                console.log(chegaram[0])
                 processoExecucao.tempo_restante--;
                 console.log(processoExecucao.id)
                 processos[processoExecucao.id].tempo_restante--;
+                addDiv(tempo, processoExecucao.id, processoExecucao);
+            }else{
+                addDiv(tempo, -10, null);
             }
-            addDiv(tempo, processoExecucao.id, processoExecucao);
 
             addTempoEspera(processoExecucao);
 
@@ -118,7 +121,7 @@ function sjf(preemp) {
         }
 
         tempo++;
-        if (tempo >= 10) {
+        if (tempo >= 20) {
             return
         }
     }
@@ -126,9 +129,8 @@ function sjf(preemp) {
 function verificaChegada(tempo, chegaram) {
     for (processo of processos) {
         if (processo.tempo_chegada <= tempo) {
-            chegaram.push({ ...processo });
+            chegaram = [{...processo}];
             console.log(chegaram)
-            return
         }
     }
 }
