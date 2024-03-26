@@ -27,9 +27,9 @@ class Processo {
 
 function populaAleatorio() {
     divInserir.innerHTML = ``
-    const p1 = new Processo(rand(8), rand(20), rand(15), 0);
-    const p2 = new Processo(rand(8), rand(20), rand(15), 1);
-    const p3 = new Processo(rand(8), rand(20), rand(15), 2);
+    const p1 = new Processo(rand(10), rand(25), rand(15), 0);
+    const p2 = new Processo(rand(10), rand(25), rand(15), 1);
+    const p3 = new Processo(rand(10), rand(25), rand(15), 2);
     processos.splice(0, processos.length)
     processos.push(p1);
     processos.push(p2);
@@ -94,25 +94,31 @@ function mostraProcessos() {
     document.getElementById('comandos').style.display = 'flex';
 }
 
-
+function resetaTempos(){
+    for(processo of processos){
+        processo.tempo_restante = processo.tempo_execucao
+        processo.tempo_espera = 0
+    }    
+}
 function sjf(preemp) {
     concluidos.splice(0, concluidos.length)
-
+    resetaTempos();
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
     tempo = 0;
-
+    
     while (concluidos.length < 3) {
         if(processos.length > 0) {
             verificaChegada(tempo);
         }
+        
         processoExecucao = verificaMenor();
+        
         if(processoExecucao === undefined){
             addDiv(tempo, -1, processoExecucao )
-        }else if(!preemp){
-
-        }
-        {
+            tempo ++
+        }else
+        if(preemp){
             processoExecucao.tempo_restante--;
             addTempoEspera(processoExecucao);
             if(processoExecucao.tempo_restante == 0){
@@ -121,14 +127,25 @@ function sjf(preemp) {
                 chegaram  = chegaram.filter(pr => pr !== processoExecucao);
             }
             addDiv(tempo, processoExecucao.id, processoExecucao)
+            tempo++
+        }else{
+            while(processoExecucao.tempo_restante > 0){
+                verificaChegada(tempo);
+                processoExecucao.tempo_restante--;
+                addTempoEspera(processoExecucao);
+                if(processoExecucao.tempo_restante == 0){
+                    concluidos.push(processoExecucao)
+                    processos.push(processoExecucao);
+                    chegaram  = chegaram.filter(pr => pr !== processoExecucao);
+                }
+                addDiv(tempo, processoExecucao.id, processoExecucao)
+                
+                tempo ++
+            }
         }
-        tempo ++
     }
-
+    
     //Para resetar e realizar outros processos:
-    for(processo of processos){
-        processo.tempo_restante = processo.tempo_execucao
-    }
 
 }
 function verificaChegada(tempo) {
@@ -157,7 +174,7 @@ function verificaMenor() {
         if (processo.tempo_restante < menor.tempo_restante && processo.tempo_restante > 0) {
             menor = processo;
         }
-
+        
     }
     return menor;
 }
@@ -165,6 +182,8 @@ function verificaMenor() {
 
 
 function fcfs() {
+    concluidos.splice(0, concluidos.length)
+    resetaTempos();
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
     let tempo = 0;
@@ -179,8 +198,8 @@ function fcfs() {
         processoExecucao.tempo_restante--;
         addDiv(tempo, processoExecucao.id, processoExecucao);
         if (processoExecucao.tempo_restante == 0) {
-            processoExecucao.tempo_restante = processoExecucao.tempo_execucao //Para resetar o processo;
             i++
+            concluidos.push(processoExecucao);
         }
     }
 }
