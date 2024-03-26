@@ -134,7 +134,7 @@ function diminuiTempo(processoExecucao){
     addTempoEspera(processoExecucao);
     if(processoExecucao.tempo_restante == 0){
         concluidos.push(processoExecucao)
-        processos.push(processoExecucao);
+        processos.push(processoExecucao)
         chegaram  = chegaram.filter(pr => pr !== processoExecucao);
     }
     addDiv(tempo, processoExecucao.id, processoExecucao)
@@ -177,6 +177,7 @@ function fcfs() {
     divTempos.style.display = 'block';
     let tempo = 0;
     let i = 0; // i = Posição do array de processos
+    let id = 0
     while (i < processos.length) {
         let processoExecucao = processos[i];
         //Dar tempo de espera verificando se o processo está iniciando
