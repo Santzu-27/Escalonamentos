@@ -65,7 +65,7 @@ function addManual(i) {
         cheg <= 0 ||
         prior <= 0
     ) {
-        alert('Preencha todos os campos!')
+        alert('Todos os campos precisam estar preenchidos.')
         return;
     }
     const processo = new Processo(cheg, exec, prior, i);
