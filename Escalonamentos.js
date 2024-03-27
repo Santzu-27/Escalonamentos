@@ -104,11 +104,11 @@ function resetaProcessos(){
     for(p of arraytemp){
         processos[p.id] = p;
     }
+    divTempos.innerHTML = '';
+    divTempos.style.display = 'block';
 }
 function sjf(preemp) {
     resetaProcessos();
-    divTempos.innerHTML = '';
-    divTempos.style.display = 'block';
     let tempo = 1;
     
     while (concluidos.length < 3) {
@@ -128,8 +128,8 @@ function sjf(preemp) {
         }else{
             while(processoExecucao.tempo_restante > 0){
                 verificaChegada(tempo);
-                tempo++
                 diminuiTempo(processoExecucao, tempo)
+                tempo++
             }
         }
     }
@@ -175,17 +175,15 @@ function verificaMenor() {
 
 function fcfs() {
     resetaProcessos();
-    divTempos.innerHTML = '';
-    divTempos.style.display = 'block';
-    let tempo = 0;
+    let tempo = 1;
     for(processo of processos){
         chegaram.push(processo);
         processos = processos.filter(p => p !== processo)
     }
     while (concluidos.length < 3) {
         let processoExecucao = chegaram[0];
-        tempo++;
         diminuiTempo(processoExecucao, tempo)
+        tempo++;
     }
 }
 
