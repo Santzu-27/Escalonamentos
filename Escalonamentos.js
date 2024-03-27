@@ -177,21 +177,23 @@ function addTempoEspera(processoExecucao) {
 }
 
 function verificaEsc(param) {
-    menor = chegaram[0];
+    let selec = chegaram[0];
     let p = 0;
     if(param == 'sjf'){        
         for (processo of chegaram) {
-            if (processo.tempo_restante < menor.tempo_restante && processo.tempo_restante > 0) {
-                menor = processo;
+            if (processo.tempo_restante < selec.tempo_restante && processo.tempo_restante > 0) {
+                selec = processo;
             }
         }
     }  
     if(param == 'prior'){
         for(processo of chegaram){
-            
+            if(processo.prioridade > selec.prioridade){
+                selec = processo;
+            }
         }
     }
-    return menor;
+    return selec;
 }
 
 function prioridade(preemp){
@@ -199,7 +201,23 @@ function prioridade(preemp){
     let tempo = 1;
     while(concluidos.length < 3){
         verificaChegada(tempo);
-        let processoExecucao = verificaEsc(); 
+        let processoExecucao = verificaEsc('prior'); 
+        
+        if(processoExecucao === undefined){
+            addDiv(tempo, -1, processoExecucao )
+            tempo ++
+        }else
+        if(preemp){
+            diminuiTempo(processoExecucao, tempo);
+            tempo++
+        }else{
+            while(processoExecucao.tempo_restante > 0){
+                verificaChegada(tempo);
+                diminuiTempo(processoExecucao, tempo)
+                tempo++
+            }
+        }
+
     }
 }
 
