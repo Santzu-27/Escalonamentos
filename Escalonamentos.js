@@ -81,11 +81,11 @@ function mostraProcessos() {
     for (info of processos) {
         divInserir.innerHTML += `
         <div id="processos">
-                <h1>Processo ${i}</h1>
-                <p>Tempo de Chegada: ${info.tempo_chegada}</p>
-                <p>Tempo de Execução: ${info.tempo_execucao}</p>
-                <p>Prioridade: ${info.prioridade}</p>
-                </div>
+        <h1>Processo ${i}</h1>
+        <p>Tempo de Chegada: ${info.tempo_chegada}</p>
+        <p>Tempo de Execução: ${info.tempo_execucao}</p>
+        <p>Prioridade: ${info.prioridade}</p>
+        </div>
         `
         i++;
     }
@@ -107,16 +107,28 @@ function resetaProcessos(){
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
 }
+
+function fcfs() {
+    resetaProcessos();
+    let tempo = 1;
+    for(processo of processos){
+        chegaram.push(processo);
+        processos = processos.filter(p => p !== processo)
+    }
+    while (concluidos.length < 3) {
+        let processoExecucao = chegaram[0];
+        diminuiTempo(processoExecucao, tempo)
+        tempo++;
+    }
+}
+
 function sjf(preemp) {
     resetaProcessos();
     let tempo = 1;
     
-    while (concluidos.length < 3) {
-        if(processos.length > 0) {
-            verificaChegada(tempo);
-        }
-        
-        processoExecucao = verificaMenor();
+    while(concluidos.length < 3){
+        verificaChegada(tempo);
+        processoExecucao = verificaEsc('sjf');
         
         if(processoExecucao === undefined){
             addDiv(tempo, -1, processoExecucao )
@@ -146,10 +158,12 @@ function diminuiTempo(processoExecucao, tempo){
     addDiv(tempo, processoExecucao.id, processoExecucao)
 }
 function verificaChegada(tempo) {
-    for (processo of processos) {
-        if (processo.tempo_chegada <= tempo && processo.tempo_restante > 0) {
-            chegaram.push(processo);
-            processos = processos.filter(p => p !== processo)
+    if(processos.length > 0){
+        for (processo of processos) {
+            if (processo.tempo_chegada <= tempo && processo.tempo_restante > 0) {
+                chegaram.push(processo);
+                processos = processos.filter(p => p !== processo)
+            }
         }
     }
 }
@@ -162,28 +176,30 @@ function addTempoEspera(processoExecucao) {
     }
 }
 
-function verificaMenor() {
+function verificaEsc(param) {
     menor = chegaram[0];
-    for (processo of chegaram) {
-        if (processo.tempo_restante < menor.tempo_restante && processo.tempo_restante > 0) {
-            menor = processo;
+    let p = 0;
+    if(param == 'sjf'){        
+        for (processo of chegaram) {
+            if (processo.tempo_restante < menor.tempo_restante && processo.tempo_restante > 0) {
+                menor = processo;
+            }
         }
-        
+    }  
+    if(param == 'prior'){
+        for(processo of chegaram){
+            
+        }
     }
     return menor;
 }
 
-function fcfs() {
+function prioridade(preemp){
     resetaProcessos();
     let tempo = 1;
-    for(processo of processos){
-        chegaram.push(processo);
-        processos = processos.filter(p => p !== processo)
-    }
-    while (concluidos.length < 3) {
-        let processoExecucao = chegaram[0];
-        diminuiTempo(processoExecucao, tempo)
-        tempo++;
+    while(concluidos.length < 3){
+        verificaChegada(tempo);
+        let processoExecucao = verificaEsc(); 
     }
 }
 
