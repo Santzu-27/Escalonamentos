@@ -128,22 +128,27 @@ function sjf(preemp) {
     
     while(concluidos.length < 3){
         verificaChegada(tempo);
-        processoExecucao = verificaEsc('sjf');
+        processoExecucao = verificaTipo('sjf');
         
-        if(processoExecucao === undefined){
-            addDiv(tempo, -1, processoExecucao )
-            tempo ++
-        }else
-        if(preemp){
-            diminuiTempo(processoExecucao, tempo);
-            tempo++
-        }else{
-            while(processoExecucao.tempo_restante > 0){
-                verificaChegada(tempo);
-                diminuiTempo(processoExecucao, tempo)
-                tempo++
-            }
-        }
+        tempo = realizaProcesso(tempo, processoExecucao, preemp);
+
+        // ^^^ Utilizei as mesmas linhas de codigo em dois processos então criei uma função que executa elas 
+
+
+        // if(processoExecucao === undefined){
+        //     addDiv(tempo, -1, processoExecucao )
+        //     tempo ++
+        // }else
+        // if(preemp){
+        //     diminuiTempo(processoExecucao, tempo);
+        //     tempo++
+        // }else{
+        //     while(processoExecucao.tempo_restante > 0){
+        //         verificaChegada(tempo);
+        //         diminuiTempo(processoExecucao, tempo)
+        //         tempo++
+        //     }
+        // }
     }
 }
 
@@ -176,9 +181,8 @@ function addTempoEspera(processoExecucao) {
     }
 }
 
-function verificaEsc(param) {
+function verificaTipo(param) {
     let selec = chegaram[0];
-    let p = 0;
     if(param == 'sjf'){        
         for (processo of chegaram) {
             if (processo.tempo_restante < selec.tempo_restante && processo.tempo_restante > 0) {
@@ -195,29 +199,49 @@ function verificaEsc(param) {
     }
     return selec;
 }
+function realizaProcesso(tempo, processoExecucao, preemp){
+    if(processoExecucao === undefined){
+        addDiv(tempo, -1, processoExecucao )
+        tempo ++
+    }else
+    if(preemp){
+        diminuiTempo(processoExecucao, tempo);
+        tempo++
+    }else{
+        while(processoExecucao.tempo_restante > 0){
+            verificaChegada(tempo);
+            diminuiTempo(processoExecucao, tempo)
+            tempo++
+        }
+    }
+    return tempo;
+}
 
 function prioridade(preemp){
     resetaProcessos();
     let tempo = 1;
     while(concluidos.length < 3){
         verificaChegada(tempo);
-        let processoExecucao = verificaEsc('prior'); 
+        let processoExecucao = verificaTipo('prior'); 
         
-        if(processoExecucao === undefined){
-            addDiv(tempo, -1, processoExecucao )
-            tempo ++
-        }else
-        if(preemp){
-            diminuiTempo(processoExecucao, tempo);
-            tempo++
-        }else{
-            while(processoExecucao.tempo_restante > 0){
-                verificaChegada(tempo);
-                diminuiTempo(processoExecucao, tempo)
-                tempo++
-            }
-        }
+        tempo = realizaProcesso(tempo, processoExecucao, preemp)
 
+        // ^^^ Utilizei as mesmas linhas de codigo em dois processos então criei uma função que executa elas 
+
+        // if(processoExecucao === undefined){
+        //     addDiv(tempo, -1, processoExecucao )
+        //     tempo ++
+        // }else
+        // if(preemp){
+        //     diminuiTempo(processoExecucao, tempo);
+        //     tempo++
+        // }else{
+        //     while(processoExecucao.tempo_restante > 0){
+        //         verificaChegada(tempo);
+        //         diminuiTempo(processoExecucao, tempo)
+        //         tempo++
+        //     }
+        // }
     }
 }
 
