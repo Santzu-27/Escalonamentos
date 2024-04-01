@@ -1,9 +1,12 @@
 const divStats = document.createElement('div');
+const divRobin = document.createElement('div')
 const mainPage = document.getElementById('main')
 const divInserir = document.getElementById('inserir')
 const divInicio = document.getElementById('inicio')
 const divTempos = document.getElementById('tempos')
 const divComandos = document.getElementById('comandos')
+
+
 let chegaram = [];
 let processos = [];
 let concluidos = []
@@ -37,7 +40,6 @@ function populaAleatorio() {
     mostraProcessos();
 }
 
-const l =2
 function populaManual(i) {
     if (i == 0) {
         processos.splice(0, processos.length)
@@ -123,36 +125,6 @@ function fcfs() {
     }
 }
 
-function sjf(preemp) {
-    resetaProcessos();
-    let tempo = 1;
-    
-    while(concluidos.length < 3){
-        verificaChegada(tempo);
-        processoExecucao = verificaTipo('sjf');
-        
-        tempo = realizaProcesso(tempo, processoExecucao, preemp);
-
-        // ^^^ Utilizei as mesmas linhas de codigo em dois processos então criei uma função que executa elas 
-
-
-        // if(processoExecucao === undefined){
-        //     addDiv(tempo, -1, processoExecucao )
-        //     tempo ++
-        // }else
-        // if(preemp){
-        //     diminuiTempo(processoExecucao, tempo);
-        //     tempo++
-        // }else{
-        //     while(processoExecucao.tempo_restante > 0){
-        //         verificaChegada(tempo);
-        //         diminuiTempo(processoExecucao, tempo)
-        //         tempo++
-        //     }
-        // }
-    }
-}
-
 function diminuiTempo(processoExecucao, tempo){
     processoExecucao.tempo_restante--;
     addTempoEspera(processoExecucao);
@@ -200,6 +172,7 @@ function verificaTipo(param) {
     }
     return selec;
 }
+
 function realizaProcesso(tempo, processoExecucao, preemp){
     if(processoExecucao === undefined){
         addDiv(tempo, -1, processoExecucao )
@@ -216,6 +189,36 @@ function realizaProcesso(tempo, processoExecucao, preemp){
         }
     }
     return tempo;
+}
+
+function sjf(preemp) {
+    resetaProcessos();
+    let tempo = 1;
+    
+    while(concluidos.length < 3){
+        verificaChegada(tempo);
+        processoExecucao = verificaTipo('sjf');
+        
+        tempo = realizaProcesso(tempo, processoExecucao, preemp);
+
+        // ^^^ Utilizei as mesmas linhas de codigo em dois processos então criei uma função que executa elas 
+
+
+        // if(processoExecucao === undefined){
+        //     addDiv(tempo, -1, processoExecucao )
+        //     tempo ++
+        // }else
+        // if(preemp){
+        //     diminuiTempo(processoExecucao, tempo);
+        //     tempo++
+        // }else{
+        //     while(processoExecucao.tempo_restante > 0){
+        //         verificaChegada(tempo);
+        //         diminuiTempo(processoExecucao, tempo)
+        //         tempo++
+        //     }
+        // }
+    }
 }
 
 function prioridade(preemp){
@@ -244,6 +247,15 @@ function prioridade(preemp){
         //     }
         // }
     }
+}
+
+function roundRobin(param){
+    let tempo = 1
+    divRobin.innerHTML = `
+        <p>Digite o time slice:<p>
+        <input type="number" min="1">
+    `
+    divInserir.appendChild(divRobin)
 }
 
 function addDiv(tempo, i, processoExecucao) {
