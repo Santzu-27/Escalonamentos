@@ -94,8 +94,12 @@ button:hover{
 }
 
 #stats{
-    width: 60%;
+    width: fit-content;
     margin: 0 auto;
     font-size: 2rem;
     text-align: LEFT;
+}
+
+.p-stat{
+    font-weight: bold;
 }

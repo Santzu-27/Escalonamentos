@@ -1,5 +1,6 @@
 const divStats = document.createElement('div');
 const divRobin = document.createElement('div')
+const sliceDiv = document.createElement('h2');
 const mainPage = document.getElementById('main')
 const divInserir = document.getElementById('inserir')
 const divInicio = document.getElementById('inicio')
@@ -257,7 +258,10 @@ function prioridade(preemp) {
 
 function roundRobin(param) {
     if (param === 0) {
-        resetaProcessos();
+        divStats.innerHTML = '';
+        divTempos.innerHTML = '';
+        divTempos.style.display = 'none';
+        
         divRobin.setAttribute('id', 'roundRobin')
         divRobin.innerHTML = `
         <p>Digite o time slice:<p>
@@ -270,6 +274,14 @@ function roundRobin(param) {
     if (param === 1) {
         resetaProcessos();
         let timeslice = Number(document.getElementById('timeslice').value)
+        if(timeslice <= 0){
+            alert('Time slice deve ser maior que zero')
+            return;
+        }
+
+        sliceDiv.innerHTML = `Timeslice: ${timeslice}`
+        divRobin.after(sliceDiv)
+
         divRobin.innerHTML = ``
         let tempo = 1
         while (concluidos.length < 3) {
@@ -282,11 +294,11 @@ function roundRobin(param) {
             else{
                 let contTimeSlice = 0;
                 while(contTimeSlice < timeslice && processoExecucao.tempo_restante > 0){
+                    verificaChegada(tempo);
                     diminuiTempo(processoExecucao, tempo)
                     tempo++
                     contTimeSlice++
                     if(contTimeSlice == timeslice){
-                        verificaChegada(tempo);
                         if(processoExecucao.tempo_restante > 0){
                             //Empurrar pro fim da fila
                             chegaram.push(processoExecucao)
@@ -325,12 +337,12 @@ function imprimeStats() {
     }
     tempoMedio = tempoTotal / concluidos.length;
     divStats.innerHTML = `
-        Tempos de espera: <br>
-        Processo ${concluidos[0].id} = ${concluidos[0].tempo_espera}<br>
-        Processo ${concluidos[1].id} = ${concluidos[1].tempo_espera}<br>
-        Processo ${concluidos[2].id} = ${concluidos[2].tempo_espera}<br>
-        Tempo médio: ${tempoMedio}<br>
-        Tempo total: ${tempoTotal}<br>
+        <h3>Tempos de espera:</h3>
+        <p><b>Processo ${concluidos[0].id}</b> = ${concluidos[0].tempo_espera}</p>
+        <p><b>Processo ${concluidos[1].id}</b> = ${concluidos[1].tempo_espera}</p>
+        <p><b>Processo ${concluidos[2].id}</b> = ${concluidos[2].tempo_espera}</p>
+        <p><b>Tempo médio: </b>${tempoMedio}</p>
+        <p><b>Tempo total: </b>${tempoTotal}</p>
     `
     divStats.setAttribute('id', 'stats')
     divTempos.after(divStats)
