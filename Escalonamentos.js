@@ -37,6 +37,7 @@ function populaAleatorio() {
     mostraProcessos();
 }
 
+const l =2
 function populaManual(i) {
     if (i == 0) {
         processos.splice(0, processos.length)
