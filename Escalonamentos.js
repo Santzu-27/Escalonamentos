@@ -257,6 +257,7 @@ function prioridade(preemp) {
 }
 
 function roundRobin(param) {
+    sliceDiv.innerHTML = ``
     if (param === 0) {
         divStats.innerHTML = '';
         divTempos.innerHTML = '';
