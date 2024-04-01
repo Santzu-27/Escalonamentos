@@ -20,9 +20,9 @@ function rand(max) {
 class Processo {
     constructor(tempo_chegada, tempo_execucao, prioridade, id) {
         this.tempo_chegada = tempo_chegada,
-        this.tempo_execucao = tempo_execucao,
-        this.prioridade = prioridade,
-        this.tempo_restante = this.tempo_execucao;
+            this.tempo_execucao = tempo_execucao,
+            this.prioridade = prioridade,
+            this.tempo_restante = this.tempo_execucao;
         this.tempo_espera = 0;
         this.id = id
     }
@@ -49,14 +49,14 @@ function populaManual(i) {
         return;
     }
     divInserir.innerHTML = `
-        <p>Digite o tempo de execução do Processo ${i}:</p>
-        <input type="number" min="1" id="exec">
-        <p>Digite o tempo de chegada do Processo ${i}:</p>
-        <input type="number" min="1" id="cheg">
+    <p>Digite o tempo de execução do Processo ${i}:</p>
+    <input type="number" min="1" id="exec">
+    <p>Digite o tempo de chegada do Processo ${i}:</p>
+    <input type="number" min="1" id="cheg">
         <p>Digite a prioridade do Processo ${i}:</p>
         <input type="number" min="1" id="prior"> <br>
         <button id="enviar"onclick="addManual(${i})">Enviar</button>
-    `
+        `
 }
 
 function addManual(i) {
@@ -83,29 +83,31 @@ function mostraProcessos() {
     let i = 0;
     for (info of processos) {
         divInserir.innerHTML += `
-        <div id="processos">
-        <h1>Processo ${i}</h1>
-        <p>Tempo de Chegada: ${info.tempo_chegada}</p>
-        <p>Tempo de Execução: ${info.tempo_execucao}</p>
-        <p>Prioridade: ${info.prioridade}</p>
-        </div>
-        `
+            <div id="processos">
+            <h1>Processo ${i}</h1>
+            <p>Tempo de Chegada: ${info.tempo_chegada}</p>
+            <p>Tempo de Execução: ${info.tempo_execucao}</p>
+            <p>Prioridade: ${info.prioridade}</p>
+            </div>
+            `
         i++;
     }
     document.getElementById('comandos').style.display = 'flex';
 }
 
-function resetaProcessos(){
+function resetaProcessos() {
     concluidos.splice(0, concluidos.length)
-    for(processo of processos){
+    for (processo of processos) {
         processo.tempo_restante = processo.tempo_execucao
         processo.tempo_espera = 0
-    }    
+    }
     //Organizar ordem:
     let arraytemp = [...processos];
     processos.splice(0, 3)
-    for(p of arraytemp){
+    for (p of arraytemp) {
         processos[p.id] = p;
+        console.log(p)
+        console.log(processos)
     }
     divTempos.innerHTML = '';
     divTempos.style.display = 'block';
@@ -114,7 +116,7 @@ function resetaProcessos(){
 function fcfs() {
     resetaProcessos();
     let tempo = 1;
-    for(processo of processos){
+    for (processo of processos) {
         chegaram.push(processo);
         processos = processos.filter(p => p !== processo)
     }
@@ -123,20 +125,21 @@ function fcfs() {
         diminuiTempo(processoExecucao, tempo)
         tempo++;
     }
+    imprimeStats()
 }
 
-function diminuiTempo(processoExecucao, tempo){
+function diminuiTempo(processoExecucao, tempo) {
     processoExecucao.tempo_restante--;
     addTempoEspera(processoExecucao);
-    if(processoExecucao.tempo_restante <= 0){
+    if (processoExecucao.tempo_restante <= 0) {
         concluidos.push(processoExecucao)
         processos.push(processoExecucao)
-        chegaram  = chegaram.filter(pr => pr !== processoExecucao);
+        chegaram = chegaram.filter(pr => pr !== processoExecucao);
     }
     addDiv(tempo, processoExecucao.id, processoExecucao)
 }
 function verificaChegada(tempo) {
-    if(processos.length > 0){
+    if (processos.length > 0) {
         for (processo of processos) {
             if (processo.tempo_chegada <= tempo && processo.tempo_restante > 0) {
                 chegaram.push(processo);
@@ -156,16 +159,16 @@ function addTempoEspera(processoExecucao) {
 
 function verificaTipo(param) {
     let selec = chegaram[0];
-    if(param == 'sjf'){        
+    if (param == 'sjf') {
         for (processo of chegaram) {
             if (processo.tempo_restante < selec.tempo_restante && processo.tempo_restante > 0) {
                 selec = processo;
             }
         }
-    }  
-    if(param == 'prior'){
-        for(processo of chegaram){
-            if(processo.prioridade > selec.prioridade){
+    }
+    if (param == 'prior') {
+        for (processo of chegaram) {
+            if (processo.prioridade > selec.prioridade) {
                 selec = processo;
             }
         }
@@ -173,32 +176,32 @@ function verificaTipo(param) {
     return selec;
 }
 
-function realizaProcesso(tempo, processoExecucao, preemp){
-    if(processoExecucao === undefined){
-        addDiv(tempo, -1, processoExecucao )
-        tempo ++
-    }else
-    if(preemp){
-        diminuiTempo(processoExecucao, tempo);
+function realizaProcesso(tempo, processoExecucao, preemp) {
+    if (processoExecucao === undefined) {
+        addDiv(tempo, -1, processoExecucao)
         tempo++
-    }else{
-        while(processoExecucao.tempo_restante > 0){
-            verificaChegada(tempo);
-            diminuiTempo(processoExecucao, tempo)
+    } else
+        if (preemp) {
+            diminuiTempo(processoExecucao, tempo);
             tempo++
+        } else {
+            while (processoExecucao.tempo_restante > 0) {
+                verificaChegada(tempo);
+                diminuiTempo(processoExecucao, tempo)
+                tempo++
+            }
         }
-    }
     return tempo;
 }
 
 function sjf(preemp) {
     resetaProcessos();
     let tempo = 1;
-    
-    while(concluidos.length < 3){
+
+    while (concluidos.length < 3) {
         verificaChegada(tempo);
         processoExecucao = verificaTipo('sjf');
-        
+
         tempo = realizaProcesso(tempo, processoExecucao, preemp);
 
         // ^^^ Utilizei as mesmas linhas de codigo em dois processos então criei uma função que executa elas 
@@ -219,15 +222,16 @@ function sjf(preemp) {
         //     }
         // }
     }
+    imprimeStats()
 }
 
-function prioridade(preemp){
+function prioridade(preemp) {
     resetaProcessos();
     let tempo = 1;
-    while(concluidos.length < 3){
+    while (concluidos.length < 3) {
         verificaChegada(tempo);
-        let processoExecucao = verificaTipo('prior'); 
-        
+        let processoExecucao = verificaTipo('prior');
+
         tempo = realizaProcesso(tempo, processoExecucao, preemp)
 
         // ^^^ Utilizei as mesmas linhas de codigo em dois processos então criei uma função que executa elas 
@@ -247,15 +251,55 @@ function prioridade(preemp){
         //     }
         // }
     }
+    imprimeStats()
+
 }
 
-function roundRobin(param){
-    let tempo = 1
-    divRobin.innerHTML = `
+function roundRobin(param) {
+    if (param === 0) {
+        resetaProcessos();
+        divRobin.setAttribute('id', 'roundRobin')
+        divRobin.innerHTML = `
         <p>Digite o time slice:<p>
-        <input type="number" min="1">
-    `
-    divInserir.appendChild(divRobin)
+        <input type="number" min="1" id="timeslice">
+        <button onclick="roundRobin(1)">Executar</button>
+        `
+        divInserir.appendChild(divRobin)
+    }
+    
+    if (param === 1) {
+        resetaProcessos();
+        let timeslice = Number(document.getElementById('timeslice').value)
+        divRobin.innerHTML = ``
+        let tempo = 1
+        while (concluidos.length < 3) {
+            verificaChegada(tempo);
+            let processoExecucao = chegaram[0];
+            if (processoExecucao === undefined) {
+                addDiv(tempo, -1, processoExecucao)
+                tempo++
+            } 
+            else{
+                let contTimeSlice = 0;
+                while(contTimeSlice < timeslice && processoExecucao.tempo_restante > 0){
+                    diminuiTempo(processoExecucao, tempo)
+                    tempo++
+                    contTimeSlice++
+                    if(contTimeSlice == timeslice){
+                        verificaChegada(tempo);
+                        if(processoExecucao.tempo_restante > 0){
+                            //Empurrar pro fim da fila
+                            chegaram.push(processoExecucao)
+
+                            //Remove do inicio da fila
+                            chegaram.splice(0, 1)
+                        }
+                    }
+                }
+            }
+        }
+        imprimeStats(chegaram);
+    }
 }
 
 function addDiv(tempo, i, processoExecucao) {
